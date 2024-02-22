@@ -1,0 +1,493 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "ProConnection API",
+        "description": "API para armazenamento de contatos de clientes",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3000",
+            "description": "Development env"
+        },
+        {
+            "url": "https://onrender-clientes-api.com",
+            "description": "Production env"
+        }
+    ],
+    "paths": {
+        "/client": {
+            "post": {
+                "description": "Esta rota é responsável por cadastrar um novo cliente no sistema.",
+                "tags": ["Rotas sem parâmetros"],
+                "requestBody": {
+                    "content":{
+                            "application/json":{
+                                "schema":{
+                                    "$ref": "#/components/schemas/createClients"
+                                }
+                            }
+                        }
+                    },
+                    "responses": {
+                        "201":{
+                            "description": "Created",
+                            "content": {
+                                "application/json": {
+                                    "schema":{
+                                        "type": "object",
+                                        "$ref": "#/components/schemas/createClients"
+                                    },
+                                    "examples": {
+                                        "client": {
+                                            "value": {
+                                                "id": "11",
+                                                "name": "Rafaela",
+                                                "email": "rafaela@gmail.com",
+                                                "telephone": "(12)23312234",
+                                                "createdAt": "2024-02-22",
+                                                "updatedAt": "2024-02-22",
+                                                "deletedAt": null
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "409": {
+                            "description": "Conflict",
+                            "content": {
+                                "application/json":{
+                                    "examples":{
+                                        "ConflictError":{
+                                            "value":{
+                                                "messageEmail": "Email already exists",
+                                                "messageTelephone": "Telephone already exists"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "security": [{}]
+                }
+            },
+            "/client/:id": {
+                "get":{
+                    "description": "Esta rota é responsável por buscar os dados do cliente.",
+                    "tags": ["Rotas com parâmetros"],
+                    "responses": {
+                        "200":{
+                            "description": "OK",
+                            "content": {
+                                "application/json":{
+                                    "schema":{
+                                        "type": "object"
+                                    },
+                                    "examples": {
+                                        "response":{
+                                            "value": [
+                                                {
+                                                    "id": 10,
+                                                    "name": "Ramon Queiroga",
+                                                    "email": "ramonqueiroga@gmail.com",
+                                                    "telephone": "(12)2331234",
+                                                    "createdAt": "2024-02-21",
+                                                    "updatedAt": "2024-02-21",
+                                                    "deletedAt": null
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json":{
+                                "examples": {
+                                    "UnauthorizedError": {
+                                        "value":{
+                                            "message": "invalid token"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                },
+                "patch": {
+                    "description": "Esta rota é responsável por alterar os dados de um cliente específico com base no seu ID.",
+                    "tags": ["Rotas com parâmetros"],
+                    "parameters": [{
+                        "schema":{
+                            "type": "number"
+                        },
+                        "in": "query",
+                        "description": "Id do Cliente",
+                        "name": "id"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/createClients"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/readClients"
+                                },
+                                "examples": {
+                                    "client": {
+                                        "value": {
+                                            "id": "11",
+                                            "name": "Rafaela",
+                                            "email": "rafaela@gmail.com",
+                                            "telephone": "(12)23312234",
+                                            "createdAt": "2024-02-22",
+                                            "updatedAt": "2024-02-22",
+                                            "deletedAt": null
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "409":{
+                        "description": "Conflict",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "ConflictError": {
+                                        "value": {
+                                            "message": "Email already exists"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                },
+                "delete": {"description": "Esta rota é responsável por excluir um cliente específico com base no seu ID.",
+                "tags": ["Rotas com parâmetros"],
+                "parameters": [
+                    {
+                        "schema":{
+                            "type": "number"
+                        },
+                        "in": "query",
+                        "description": "Id do cliente",
+                        "name": "id"
+                    }
+                ],
+                "responses": {
+                    "204":{
+                        "description": "No body content"
+                    }
+                }
+            }
+        },
+        "/contact": {
+            "post":{
+                "description": "Esta rota é responsável por cadastrar um novo contato associado a um cliente.",
+                "tags": ["Rotas sem parâmetros"],
+                "requestBody": {
+                        "content":{
+                            "application/json":{
+                                    "schema":{
+                                    "$ref": "#/components/schemas/createContact"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201":{
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "schema":{
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/createContact"
+                                },
+                                "examples": {
+                                    "contact": {
+                                        "value":{
+                                                "id": 20,
+                                                "name": " Leleo",
+                                                "email": "lelo@dgmail.ccom",
+                                                "telephone": "99123234",
+                                                "createdAt": "2024-02-21",
+                                                "updatedAt": "2024-02-21",
+                                                "deletedAt": null
+                                            
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "content": {
+                            "application/json":{
+                                "examples": {
+                                    " ConflictError":{
+                                        "value":{
+                                            "message": "Email already exists"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                },
+            "get": {"description": "Esta rota é responsável por buscar todos os contatos cadastrados de um cliente.",
+            "tags": ["Rotas sem parâmetros"],
+            "responses": {
+                "200":{ 
+                    "description": "OK",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array"
+                            }, 
+                            "examples": {
+                                "response":{
+                                    "value": [[
+                                        {
+                                            "id": 4,
+                                            "name": " blu",
+                                            "email": "blluu@gmail.ccom",
+                                            "telephone": "13311d312",
+                                            "createdAt": "2024-02-07",
+                                            "updatedAt": "2024-02-07",
+                                            "deletedAt": null
+                                        },
+                                        {
+                                            "id": 5,
+                                            "name": " Lais ",
+                                            "email": "Lais@gmail.ccom",
+                                            "telephone": "1331d312",
+                                            "createdAt": "2024-02-15",
+                                            "updatedAt": "2024-02-15",
+                                            "deletedAt": null
+                                        },
+                                        {
+                                            "id": 6,
+                                            "name": " Miguel ",
+                                            "email": "Miguel@gmail.ccom",
+                                            "telephone": "1331632312",
+                                            "createdAt": "2024-02-15",
+                                            "updatedAt": "2024-02-15",
+                                            "deletedAt": null
+                                        },
+                                        {
+                                            "id": 7,
+                                            "name": " Larissa ",
+                                            "email": "Larissa@gmail.ccom",
+                                            "telephone": "1331232312",
+                                            "createdAt": "2024-02-15",
+                                            "updatedAt": "2024-02-15",
+                                            "deletedAt": null
+                                        }
+                                    ]]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        },
+        "/contact/:id":{
+            "patch": {
+                "description": "Esta rota é responsável por alterar os dados de um contato específico com base no seu ID.",
+                "tags": ["Rotas com parâmetros"],
+                "parameters": [
+                    {
+                        "schema":{
+                            "type": "number"
+                        },
+                        "in": "query",
+                        "description": "Id do contato",
+                        "name": "id"
+                    }
+                ],
+                "requestBody":{
+                    "content": {
+                        "application/json": {
+                            "schema":{
+                                "$ref": "#/components/schemas/createContact"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200":{
+                        "description": "OK",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/readContact"
+                                },
+                                "examples": {
+                                    "contact":{
+                                        "value":{
+                                            "id": 20,
+                                            "name": " Leonardo",
+                                            "email": "leonardo@gmail.ccom",
+                                            "telephone": "133s7d12",
+                                            "createdAt": "2024-02-21",
+                                            "updatedAt": "2024-02-21",
+                                            "deletedAt": null
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "409":{
+                        "description": "Conflict",
+                        "content": {
+                            "application/json":{
+                                "examples": {
+                                    "ConflictError":{
+                                        "value":{
+                                            "message": "Email already exists"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+        }, 
+            "delete": {"description": "Esta rota é responsável por excluir um contato específico com base no seu ID.",
+            "tags": ["Rotas com parâmetros"],
+            "parameters": [
+                {
+                    "schema":{
+                        "type": "number"
+                    },
+                    "in": "query",
+                    "description": "Id do contato",
+                    "name": "id"
+                }
+            ],
+            "responses": {
+                "204": {
+                    "description": "No Body content"
+                }
+            }
+        }
+        }
+    },
+    "components": {
+        "schemas": {
+            "createClients": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    }, 
+                    "email": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "telephone": {
+                        "type": "string"
+                    }
+                }
+            }, 
+            "readClients":{
+                "type": "object",
+                "properties": {
+                    "id":{
+                        "type": "number"
+                    },
+                    "name": {
+                        "type": "string"
+                    }, 
+                    "email": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "telephone": {
+                        "type": "string"
+                    },
+                    "createdAt": {
+                        "type": "string"
+                    },
+                    "updateAt": {
+                        "type": "string"
+                    },
+                    "deleteAt": {
+                        "type": "string"
+                    }
+                }
+            },
+            "createContact":{
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    }, 
+                    "email": {
+                        "type": "string"
+                    },
+                    "telephone": {
+                        "type": "string"
+                    }
+                }
+            },
+            "readContact":{
+                "type": "object",
+                "properties": {
+                    "id":{
+                        "type": "number"
+                    },
+                    "name": {
+                        "type": "string"
+                    }, 
+                    "email": {
+                        "type": "string"
+                    },
+                    "telephone": {
+                        "type": "string"
+                    },
+                    "createdAt": {
+                        "type": "string"
+                    },
+                    "updateAt": {
+                        "type": "string"
+                    },
+                    "deleteAt": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    },
+    "security": [{
+        "JWT": []
+    }]
+}

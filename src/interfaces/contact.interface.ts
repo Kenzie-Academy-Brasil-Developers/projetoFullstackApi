@@ -1,10 +1,10 @@
 import { z } from "zod";
 import { DeepPartial, Repository } from "typeorm";
-import Contact from "../entities/Contact.entity";
 import {
   contactReturnSchema,
   createContactSchema,
 } from "../schemas/contact.schema";
+import { Contact } from "../entities/Contact.entity";
 
 type ContactCreate = z.infer<typeof createContactSchema>;
 

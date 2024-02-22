@@ -1,11 +1,11 @@
 import { z } from "zod";
 import { DeepPartial, Repository } from "typeorm";
-import Client from "../entities/Client.entity";
 import {
   clientLoginSchema,
   clientReturnSchema,
   createClientSchema,
 } from "../schemas/client.schema";
+import { Client } from "../entities/Client.entity";
 
 type ClientCreate = z.infer<typeof createClientSchema>;
 
